@@ -1,9 +1,9 @@
-from langchain_anthropic import ChatAnthropic
+from langchain_groq import ChatGroq
 from langchain_core.messages import HumanMessage
 from tools.market_tools import get_stock_price
 from state import TradeState
 
-llm = ChatAnthropic(model="claude-3-5-haiku-20241022")
+llm = ChatGroq(model="llama-3.3-70b-versatile")
 price_llm = llm.bind_tools([get_stock_price])
 
 def price_agent(state: TradeState) -> TradeState:
