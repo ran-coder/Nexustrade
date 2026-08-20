@@ -1,8 +1,25 @@
 from dotenv import load_dotenv
-import os
-
 load_dotenv()
 
-groq_key = os.getenv("GROQ_API_KEY")
-news_key = os.getenv("NEWS_API_KEY")
-langchain_key = os.getenv("LANGCHAIN_API_KEY")
+from graph.workflow import graph
+from state import TradeState
+
+def run(ticker: str):
+    initial_state: TradeState = {
+        "ticker": ticker.upper(),
+        "current_price": None,
+        "headlines": None,
+        "rsi": None,
+        "confidence": None,
+        "report": None,
+        "needs_human_review": False,
+    }
+    result = graph.invoke(initial_state)
+    print("\n── NexusTrade Report ──────────────────────────")
+    print(result["report"])
+    print(f"\nConfidence: {result['confidence']}")
+
+if __name__ == "__main__":
+    import sys
+    ticker = sys.argv[1] if len(sys.argv) > 1 else "AAPL"
+    run(ticker)
